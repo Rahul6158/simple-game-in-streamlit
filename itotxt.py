@@ -1,10 +1,9 @@
 import streamlit as st
-from translate import Translator
-from gtts import gTTS
 import os
 import base64
 import docx2txt
 from googletrans import Translator
+from gtts import gTTS
 
 # Function to extract text from a DOCX file
 def process_docx_text(docx_file):
@@ -17,6 +16,20 @@ def translate_text_google(text, target_language):
     translator = Translator()
     translated_text = translator.translate(text, dest=target_language)
     return translated_text.text
+
+# Function to convert text to speech and save as an MP3 file
+def convert_text_to_speech(text, output_file, language='en'):
+    if text:
+        tts = gTTS(text=text, lang=language)
+        tts.save(output_file)
+
+# Function to generate a download link for a file
+def get_binary_file_downloader_html(link_text, file_path, file_format):
+    with open(file_path, 'rb') as f:
+        file_data = f.read()
+    b64_file = base64.b64encode(file_data).decode()
+    download_link = f'<a href="data:{file_format};base64,{b64_file}" download="{os.path.basename(file_path)}">{link_text}</a>'
+    return download_link
 
 # Language mapping dictionary
 language_mapping = {
@@ -47,11 +60,12 @@ def main():
 
         target_language = st.selectbox("Select target language:", list(language_mapping.values()))
 
-# Check if the target language is in the mapping
+        # Check if the target language is in the mapping
         target_language_code = [code for code, lang in language_mapping.items() if lang == target_language][0]
 
-# Translate the extracted text using Google Translate
-        translated_text = translate_text_google(docx_text, target_language_code)    
+        # Translate the extracted text using Google Translate
+        translated_text = translate_text_google(docx_text, target_language_code)
+
         # Display translated text
         if translated_text:
             st.subheader(f"Translated text ({target_language}):")
