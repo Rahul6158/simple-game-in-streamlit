@@ -1,6 +1,5 @@
 streamlit
-gtts
-os
+gttss
 base64
 docx
 pyttsx3
