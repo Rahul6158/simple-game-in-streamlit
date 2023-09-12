@@ -5,6 +5,8 @@ import docx2txt
 from googletrans import Translator
 from gtts import gTTS
 import io
+from docx import Document
+
 
 # Function to extract text from a DOCX file
 def process_docx_text(docx_file):
