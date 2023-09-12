@@ -4,6 +4,7 @@ from gtts import gTTS
 import os
 import base64
 import docx2txt
+from googletrans import Translator
 
 # Function to extract text from a DOCX file
 def process_docx_text(docx_file):
@@ -11,22 +12,11 @@ def process_docx_text(docx_file):
     text = docx2txt.process(docx_file)
     return text
 
-# Function to translate text
-def translate_text(text, target_language):
-    if target_language in language_mapping:
-        max_query_length = 500  # Adjust this limit as needed
-        translator = Translator(to_lang=target_language)
-
-        # Split the text into segments that fit within the query length limit
-        segments = [text[i:i+max_query_length] for i in range(0, len(text), max_query_length)]
-
-        # Translate each segment and combine the results
-        translations = [translator.translate(segment) for segment in segments]
-        translation = " ".join(translations)
-
-        return translation
-    else:
-        return "Language not found in the mapping"
+# Function to translate text using Google Translate API
+def translate_text_google(text, target_language):
+    translator = Translator()
+    translated_text = translator.translate(text, dest=target_language)
+    return translated_text.text
 
 # Language mapping dictionary
 language_mapping = {
@@ -57,12 +47,11 @@ def main():
 
         target_language = st.selectbox("Select target language:", list(language_mapping.values()))
 
-        # Check if the target language is in the mapping
+# Check if the target language is in the mapping
         target_language_code = [code for code, lang in language_mapping.items() if lang == target_language][0]
 
-        # Translate the extracted text
-        translated_text = translate_text(docx_text, target_language_code)
-
+# Translate the extracted text using Google Translate
+        translated_text = translate_text_google(docx_text, target_language_code)    
         # Display translated text
         if translated_text:
             st.subheader(f"Translated text ({target_language}):")
