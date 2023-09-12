@@ -172,4 +172,5 @@ def main():
             # Provide a download link for the Word document
             st.markdown(get_binary_file_downloader_html("Download Word Document", word_output_file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), unsafe_allow_html=True)
 
-if __name__ ==
+if __name__ == "__main__":
+    main()
