@@ -1,6 +1,6 @@
+docx
 streamlit
 gtts
-docx
 pyttsx3
 pillow
 translate
