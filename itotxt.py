@@ -3,6 +3,7 @@ import os
 import base64
 import docx2txt
 from googletrans import Translator
+import docx
 from gtts import gTTS
 import io
 
