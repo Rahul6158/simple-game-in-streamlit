@@ -100,7 +100,7 @@ def get_binary_file_downloader_html(link_text, file_path, file_format):
 
 def main():
     st.image("jangirii.png", width=50)
-    st.title("Text Translation and Conversion to speech (English - other languages)")
+    st.title("Text Translation and Conversion to Speech (English - other languages)")
 
     # Add a file uploader for DOCX files
     uploaded_docx = st.file_uploader("Upload a DOCX file", type=["docx"])
@@ -119,7 +119,7 @@ def main():
     target_language_code = [code for code, lang in language_mapping.items() if lang == target_language][0]
 
     # Translate the extracted text
-    translated_text = translate_text(text, target_language_code)
+    translated_text = translate_text(docx_text, target_language_code)
 
     # Display translated text
     if translated_text:
@@ -145,7 +145,7 @@ def main():
         else:
             st.warning("Unsupported operating system")
 
-        # Provide download link for the MP3 file
+        # Provide a download link for the MP3 file
         st.markdown(get_binary_file_downloader_html("Download Audio File", output_file, 'audio/mp3'), unsafe_allow_html=True)
 
 if __name__ == "__main__":
