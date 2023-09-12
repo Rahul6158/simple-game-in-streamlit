@@ -4,18 +4,6 @@ from gtts import gTTS
 import os
 import base64
 import docx2txt
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
-from google.oauth2 import service_account
-
-# Load credentials from the JSON file you downloaded
-credentials = service_account.Credentials.from_service_account_file(
-    'client_secret_1025941046412-n5vt0i19b9l86knifjhvkrushuv4vdla.apps.googleusercontent.com.json',
-    scopes=['https://www.googleapis.com/auth/drive']
-)
-
-# Create a Drive API service
-drive_service = build('drive', 'v3', credentials=credentials)
 
 # Function to extract text from a DOCX file
 def process_docx_text(docx_file):
@@ -56,7 +44,6 @@ def get_binary_file_downloader_html(link_text, file_path, file_format):
     download_link = f'<a href="data:{file_format};base64,{b64_file}" download="{os.path.basename(file_path)}">{link_text}</a>'
     return download_link
 
-# Language mapping dictionary
 language_mapping = {
     "en": "English",
     "es": "Spanish",
