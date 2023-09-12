@@ -5,6 +5,7 @@ import os
 import base64
 import docx2txt
 
+# Language mapping dictionary
 language_mapping = {
     "en": "English",
     "es": "Spanish",
@@ -67,12 +68,12 @@ language_mapping = {
     "xh": "Xhosa"
 }
 
+
+# Function to extract text from a DOCX file
 def process_docx_text(docx_file):
-    doc = Document(docx_file)
     # Extract text from the DOCX file
     text = docx2txt.process(docx_file)
     return text
-
 
 # Function to translate text
 def translate_text(text, target_language):
@@ -91,6 +92,7 @@ def convert_text_to_speech(text, output_file, language='en'):
     else:
         st.warning("No text to speak")
 
+# Function to generate a download link for a file
 def get_binary_file_downloader_html(link_text, file_path, file_format):
     with open(file_path, 'rb') as f:
         file_data = f.read()
@@ -98,6 +100,7 @@ def get_binary_file_downloader_html(link_text, file_path, file_format):
     download_link = f'<a href="data:{file_format};base64,{b64_file}" download="{os.path.basename(file_path)}">{link_text}</a>'
     return download_link
 
+# Main Streamlit app
 def main():
     st.image("jangirii.png", width=50)
     st.title("Text Translation and Conversion to Speech (English - other languages)")
