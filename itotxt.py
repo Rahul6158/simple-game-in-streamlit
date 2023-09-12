@@ -4,6 +4,7 @@ import base64
 import docx2txt
 from googletrans import Translator
 from gtts import gTTS
+import docx  # Import Document from the docx library
 import io
 
 # Function to extract text from a DOCX file
@@ -31,6 +32,12 @@ def get_binary_file_downloader_html(link_text, file_path, file_format):
     b64_file = base64.b64encode(file_data).decode()
     download_link = f'<a href="data:{file_format};base64,{b64_file}" download="{os.path.basename(file_path)}">{link_text}</a>'
     return download_link
+
+# Function to convert translated text to a Word document
+def convert_text_to_word_doc(text, output_file):
+    doc = docx.Document()
+    doc.add_paragraph(text)
+    doc.save(output_file)
 
 language_mapping = {
     "en": "English",
