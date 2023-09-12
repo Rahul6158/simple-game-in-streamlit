@@ -1,6 +1,5 @@
 streamlit
 gtts
-base64
 docx
 pyttsx3
 pillow
