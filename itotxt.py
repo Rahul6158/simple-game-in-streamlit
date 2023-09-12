@@ -78,8 +78,16 @@ def process_docx_text(docx_file):
 # Function to translate text
 def translate_text(text, target_language):
     if target_language in language_mapping:
+        max_query_length = 500  # Adjust this limit as needed
         translator = Translator(to_lang=target_language)
-        translation = translator.translate(text)
+
+        # Split the text into segments that fit within the query length limit
+        segments = [text[i:i+max_query_length] for i in range(0, len(text), max_query_length)]
+
+        # Translate each segment and combine the results
+        translations = [translator.translate(segment) for segment in segments]
+        translation = " ".join(translations)
+
         return translation
     else:
         return "Language not found in the mapping"
