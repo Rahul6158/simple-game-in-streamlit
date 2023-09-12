@@ -37,18 +37,20 @@ def get_binary_file_downloader_html(link_text, file_path, file_format):
     return download_link
 
 def main():
+def main():
     st.image("jangirii.png", width=50)
-    st.title("Document Translation and Conversion to Speech")
+    st.title("Text Translation and Conversion to speech (English - other languages)")
 
-    # Allow users to upload a DOCX file
-    uploaded_file = st.file_uploader("Upload a DOCX file", type=["docx"])
+    # Add a file uploader for DOCX files
+    uploaded_docx = st.file_uploader("Upload a DOCX file", type=["docx"])
 
-    if uploaded_file:
-        # Read the uploaded DOCX file and extract text
-        doc = Document(uploaded_file)
-        text = '\n'.join([paragraph.text for paragraph in doc.paragraphs])
-    else:
-        text = ""
+    if uploaded_docx is not None:
+        # Read the uploaded DOCX file and process its text content
+        docx_text = process_docx_text(uploaded_docx)
+
+        # Display the extracted text
+        st.subheader("Text Extracted from Uploaded DOCX:")
+        st.write(docx_text)
 
     target_language = st.selectbox("Select target language:", list(language_mapping.values()))
 
