@@ -3,7 +3,7 @@ from translate import Translator
 from gtts import gTTS
 import os
 import base64
-from docx import Document
+import docx2txt
 
 language_mapping = {
     "en": "English",
@@ -69,10 +69,10 @@ language_mapping = {
 
 def process_docx_text(docx_file):
     doc = Document(docx_file)
-    text = ""
-    for paragraph in doc.paragraphs:
-        text += paragraph.text + "\n"
+    # Extract text from the DOCX file
+    text = docx2txt.process(docx_file)
     return text
+
 
 # Function to translate text
 def translate_text(text, target_language):
