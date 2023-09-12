@@ -5,23 +5,56 @@ import os
 import base64
 import docx2txt
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
 from google.oauth2 import service_account
 
 # Load credentials from the JSON file you downloaded
 credentials = service_account.Credentials.from_service_account_file(
-    'path/to/your/credentials.json',
+    'client_secret_1025941046412-n5vt0i19b9l86knifjhvkrushuv4vdla.apps.googleusercontent.com.json',
     scopes=['https://www.googleapis.com/auth/drive']
 )
 
 # Create a Drive API service
 drive_service = build('drive', 'v3', credentials=credentials)
 
-# Upload a file to Google Drive
-file_metadata = {'name': 'example.txt'}
-media = MediaFileUpload('path/to/your/local/file.txt', mimetype='text/plain')
-file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-print('File ID:', file.get('id'))
+# Function to extract text from a DOCX file
+def process_docx_text(docx_file):
+    # Extract text from the DOCX file
+    text = docx2txt.process(docx_file)
+    return text
 
+# Function to translate text
+def translate_text(text, target_language):
+    if target_language in language_mapping:
+        max_query_length = 500  # Adjust this limit as needed
+        translator = Translator(to_lang=target_language)
+
+        # Split the text into segments that fit within the query length limit
+        segments = [text[i:i+max_query_length] for i in range(0, len(text), max_query_length)]
+
+        # Translate each segment and combine the results
+        translations = [translator.translate(segment) for segment in segments]
+        translation = " ".join(translations)
+
+        return translation
+    else:
+        return "Language not found in the mapping"
+
+# Function to convert text to speech and save as an MP3 file
+def convert_text_to_speech(text, output_file, language='en'):
+    if text:
+        tts = gTTS(text=text, lang=language)
+        tts.save(output_file)
+    else:
+        st.warning("No text to speak")
+
+# Function to generate a download link for a file
+def get_binary_file_downloader_html(link_text, file_path, file_format):
+    with open(file_path, 'rb') as f:
+        file_data = f.read()
+    b64_file = base64.b64encode(file_data).decode()
+    download_link = f'<a href="data:{file_format};base64,{b64_file}" download="{os.path.basename(file_path)}">{link_text}</a>'
+    return download_link
 
 # Language mapping dictionary
 language_mapping = {
@@ -85,46 +118,6 @@ language_mapping = {
     "zu": "Zulu",
     "xh": "Xhosa"
 }
-
-
-# Function to extract text from a DOCX file
-def process_docx_text(docx_file):
-    # Extract text from the DOCX file
-    text = docx2txt.process(docx_file)
-    return text
-
-# Function to translate text
-def translate_text(text, target_language):
-    if target_language in language_mapping:
-        max_query_length = 500  # Adjust this limit as needed
-        translator = Translator(to_lang=target_language)
-
-        # Split the text into segments that fit within the query length limit
-        segments = [text[i:i+max_query_length] for i in range(0, len(text), max_query_length)]
-
-        # Translate each segment and combine the results
-        translations = [translator.translate(segment) for segment in segments]
-        translation = " ".join(translations)
-
-        return translation
-    else:
-        return "Language not found in the mapping"
-
-# Function to convert text to speech and save as an MP3 file
-def convert_text_to_speech(text, output_file, language='en'):
-    if text:
-        tts = gTTS(text=text, lang=language)
-        tts.save(output_file)
-    else:
-        st.warning("No text to speak")
-
-# Function to generate a download link for a file
-def get_binary_file_downloader_html(link_text, file_path, file_format):
-    with open(file_path, 'rb') as f:
-        file_data = f.read()
-    b64_file = base64.b64encode(file_data).decode()
-    download_link = f'<a href="data:{file_format};base64,{b64_file}" download="{os.path.basename(file_path)}">{link_text}</a>'
-    return download_link
 
 # Main Streamlit app
 def main():
