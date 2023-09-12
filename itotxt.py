@@ -4,7 +4,6 @@ import base64
 import docx2txt
 from googletrans import Translator
 from gtts import gTTS
-import docx  # Import Document from the docx library
 import io
 
 # Function to extract text from a DOCX file
