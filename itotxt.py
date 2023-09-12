@@ -6,7 +6,7 @@ from googletrans import Translator
 from gtts import gTTS
 import io
 from docx import Document
-
+from bs4 import BeautifulSoup
 
 # Function to extract text from a DOCX file
 def process_docx_text(docx_file):
@@ -36,9 +36,15 @@ def get_binary_file_downloader_html(link_text, file_path, file_format):
 
 # Function to convert translated text to a Word document
 def convert_text_to_word_doc(text, output_file):
-    doc = docx.Document()
+    doc = Document()
     doc.add_paragraph(text)
     doc.save(output_file)
+
+# Function to convert Word document to HTML
+def convert_word_doc_to_html(docx_file):
+    txt = docx2txt.process(docx_file)
+    soup = BeautifulSoup(txt, 'html.parser')
+    return soup.prettify()
 
 language_mapping = {
     "en": "English",
@@ -105,10 +111,10 @@ language_mapping = {
 # Main Streamlit app
 def main():
     st.image("jangirii.png", width=50)
-    st.title("Documnet Translation and Conversion to Speech (English - other languages)")
+    st.title("Text Translation and Conversion to Speech (English - other languages)")
 
     # Add a file uploader for DOCX files
-    uploaded_docx = st.file_uploader("Upload a DOCX format file", type=["docx"])
+    uploaded_docx = st.file_uploader("Upload a DOCX file", type=["docx"])
 
     if uploaded_docx is not None:
         # Read the uploaded DOCX file and process its text content
@@ -134,7 +140,7 @@ def main():
             st.warning("Translation result is empty. Please check your input text.")
 
         # Convert the translated text to speech
-        if st.button("Convert to Speech and get word document"):
+        if st.button("Convert to Speech"):
             output_file = "translated_speech.mp3"
             convert_text_to_speech(translated_text, output_file, language=target_language_code)
 
@@ -157,8 +163,13 @@ def main():
             word_output_file = "translated_text.docx"
             convert_text_to_word_doc(translated_text, word_output_file)
 
+            # Display the Word document as HTML
+            with open(word_output_file, "rb") as f:
+                html_data = convert_word_doc_to_html(f)
+            st.subheader("Preview of Translated Text as Word Document:")
+            st.components.v1.html(html_data, width=600, height=800)
+
             # Provide a download link for the Word document
             st.markdown(get_binary_file_downloader_html("Download Word Document", word_output_file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), unsafe_allow_html=True)
 
-if __name__ == "__main__":
-    main()
+if __name__ ==
