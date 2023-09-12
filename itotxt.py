@@ -4,7 +4,7 @@ import base64
 import docx2txt
 from googletrans import Translator
 from gtts import gTTS
-from docx import Document
+import docx  # Import Document from the docx library
 import io
 
 # Function to extract text from a DOCX file
@@ -25,20 +25,6 @@ def convert_text_to_speech(text, output_file, language='en'):
         tts = gTTS(text=text, lang=language)
         tts.save(output_file)
 
-# Function to convert translated text to a Word document
-def convert_text_to_word_doc(text, output_file):
-    doc = Document()  # Create a new Word document
-    doc.add_paragraph(text)  # Add the translated text as a paragraph
-
-    # Save the document to a BytesIO buffer
-    output_buffer = io.BytesIO()
-    doc.save(output_buffer)
-    output_buffer.seek(0)
-
-    # Write the buffer contents to the specified output file
-    with open(output_file, 'wb') as f:
-        f.write(output_buffer.read())
-
 # Function to generate a download link for a file
 def get_binary_file_downloader_html(link_text, file_path, file_format):
     with open(file_path, 'rb') as f:
@@ -54,7 +40,59 @@ language_mapping = {
     "de": "German",
     "it": "Italian",
     "pt": "Portuguese",
-    # Add more languages as needed
+    "nl": "Dutch",
+    "hi": "Hindi",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "zh-cn": "Simplified Chinese",
+    "ru": "Russian",
+    "ar": "Arabic",
+    "th": "Thai",
+    "tr": "Turkish",
+    "pl": "Polish",
+    "cs": "Czech",
+    "sv": "Swedish",
+    "da": "Danish",
+    "fi": "Finnish",
+    "el": "Greek",
+    "hu": "Hungarian",
+    "uk": "Ukrainian",
+    "no": "Norwegian",
+    "id": "Indonesian",
+    "vi": "Vietnamese",
+    "ro": "Romanian",
+    "bn": "Bengali",
+    "fa": "Persian",
+    "iw": "Hebrew",
+    "bg": "Bulgarian",
+    "ca": "Catalan",
+    "hr": "Croatian",
+    "sr": "Serbian",
+    "sk": "Slovak",
+    "sl": "Slovenian",
+    "lt": "Lithuanian",
+    "lv": "Latvian",
+    "et": "Estonian",
+    "is": "Icelandic",
+    "ga": "Irish",
+    "sq": "Albanian",
+    "mk": "Macedonian",
+    "hy": "Armenian",
+    "ka": "Georgian",
+    "mt": "Maltese",
+    "mr": "Marathi",
+    "ta": "Tamil",
+    "te": "Telugu",
+    "ur": "Urdu",
+    "ne": "Nepali",
+    "si": "Sinhala",
+    "km": "Khmer",
+    "lo": "Lao",
+    "my": "Burmese",
+    "jw": "Javanese",
+    "mn": "Mongolian",
+    "zu": "Zulu",
+    "xh": "Xhosa"
 }
 
 # Main Streamlit app
@@ -108,8 +146,7 @@ def main():
             # Provide a download link for the MP3 file
             st.markdown(get_binary_file_downloader_html("Download Audio File", output_file, 'audio/mp3'), unsafe_allow_html=True)
 
-        # Convert the translated text to a Word document
-        if st.button("Convert to Word Document"):
+            # Convert the translated text to a Word document
             word_output_file = "translated_text.docx"
             convert_text_to_word_doc(translated_text, word_output_file)
 
