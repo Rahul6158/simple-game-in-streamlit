@@ -116,40 +116,40 @@ def main():
         st.subheader("Text Extracted from Uploaded DOCX:")
         st.write(docx_text)
 
-    target_language = st.selectbox("Select target language:", list(language_mapping.values()))
+        target_language = st.selectbox("Select target language:", list(language_mapping.values()))
 
-    # Check if the target language is in the mapping
-    target_language_code = [code for code, lang in language_mapping.items() if lang == target_language][0]
+        # Check if the target language is in the mapping
+        target_language_code = [code for code, lang in language_mapping.items() if lang == target_language][0]
 
-    # Translate the extracted text
-    translated_text = translate_text(docx_text, target_language_code)
+        # Translate the extracted text
+        translated_text = translate_text(docx_text, target_language_code)
 
-    # Display translated text
-    if translated_text:
-        st.subheader(f"Translated text ({target_language}):")
-        st.write(translated_text)
-    else:
-        st.warning("Translation result is empty. Please check your input text.")
-
-    # Convert the translated text to speech
-    if st.button("Convert to Speech"):
-        output_file = "translated_speech.mp3"
-        convert_text_to_speech(translated_text, output_file, language=target_language_code)
-
-        # Play the generated speech
-        audio_file = open(output_file, 'rb')
-        st.audio(audio_file.read(), format='audio/mp3')
-
-        # Play the generated speech (platform-dependent)
-        if os.name == 'posix':  # For Unix/Linux
-            os.system(f"xdg-open {output_file}")
-        elif os.name == 'nt':  # For Windows
-            os.system(f"start {output_file}")
+        # Display translated text
+        if translated_text:
+            st.subheader(f"Translated text ({target_language}):")
+            st.write(translated_text)
         else:
-            st.warning("Unsupported operating system")
+            st.warning("Translation result is empty. Please check your input text.")
 
-        # Provide a download link for the MP3 file
-        st.markdown(get_binary_file_downloader_html("Download Audio File", output_file, 'audio/mp3'), unsafe_allow_html=True)
+        # Convert the translated text to speech
+        if st.button("Convert to Speech"):
+            output_file = "translated_speech.mp3"
+            convert_text_to_speech(translated_text, output_file, language=target_language_code)
+
+            # Play the generated speech
+            audio_file = open(output_file, 'rb')
+            st.audio(audio_file.read(), format='audio/mp3')
+
+            # Play the generated speech (platform-dependent)
+            if os.name == 'posix':  # For Unix/Linux
+                os.system(f"xdg-open {output_file}")
+            elif os.name == 'nt':  # For Windows
+                os.system(f"start {output_file}")
+            else:
+                st.warning("Unsupported operating system")
+
+            # Provide a download link for the MP3 file
+            st.markdown(get_binary_file_downloader_html("Download Audio File", output_file, 'audio/mp3'), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
