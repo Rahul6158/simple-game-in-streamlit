@@ -133,7 +133,7 @@ def main():
             st.warning("Translation result is empty. Please check your input text.")
 
         # Convert the translated text to speech
-        if st.button("get audio and document for download"):
+        if st.button("get audio and translated document for download"):
             output_file = "translated_speech.mp3"
             convert_text_to_speech(translated_text, output_file, language=target_language_code)
 
