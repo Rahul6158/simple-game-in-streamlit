@@ -1,4 +1,4 @@
-docx
+--upgrade python-docx
 streamlit
 gtts
 pyttsx3
