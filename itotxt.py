@@ -5,7 +5,6 @@ import docx2txt
 from googletrans import Translator
 from gtts import gTTS
 import io
-from docx import Document
 
 # Function to extract text from a DOCX file
 def process_docx_text(docx_file):
@@ -35,7 +34,7 @@ def get_binary_file_downloader_html(link_text, file_path, file_format):
 
 # Function to convert translated text to a Word document
 def convert_text_to_word_doc(text, output_file):
-    doc = Document()
+    doc = docx.Document()
     doc.add_paragraph(text)
     doc.save(output_file)
 
@@ -155,12 +154,6 @@ def main():
             # Convert the translated text to a Word document
             word_output_file = "translated_text.docx"
             convert_text_to_word_doc(translated_text, word_output_file)
-
-            # Display the Word document as HTML
-            with open(word_output_file, "rb") as f:
-                docx_data = f.read()
-            st.subheader("Preview of Translated Text as Word Document:")
-            st.components.v1.html(base64.b64encode(docx_data).decode(), width=600, height=800)
 
             # Provide a download link for the Word document
             st.markdown(get_binary_file_downloader_html("Download Word Document", word_output_file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), unsafe_allow_html=True)
