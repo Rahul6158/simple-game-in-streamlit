@@ -1,4 +1,5 @@
---upgrade python-docx
+docx2txt
+docx
 streamlit
 gtts
 pyttsx3
