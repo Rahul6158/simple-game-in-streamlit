@@ -4,6 +4,24 @@ from gtts import gTTS
 import os
 import base64
 import docx2txt
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
+
+# Load credentials from the JSON file you downloaded
+credentials = service_account.Credentials.from_service_account_file(
+    'path/to/your/credentials.json',
+    scopes=['https://www.googleapis.com/auth/drive']
+)
+
+# Create a Drive API service
+drive_service = build('drive', 'v3', credentials=credentials)
+
+# Upload a file to Google Drive
+file_metadata = {'name': 'example.txt'}
+media = MediaFileUpload('path/to/your/local/file.txt', mimetype='text/plain')
+file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+print('File ID:', file.get('id'))
+
 
 # Language mapping dictionary
 language_mapping = {
