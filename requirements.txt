@@ -6,7 +6,4 @@ pyttsx3
 pillow
 translate
 googletrans==4.0.0-rc1
-googleapiclient
-googleapiclient
-google.oauth2 
 python-docx
