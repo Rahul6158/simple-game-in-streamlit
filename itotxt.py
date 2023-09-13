@@ -13,11 +13,12 @@ def process_docx_text(docx_file):
     text = docx2txt.process(docx_file)
     return text
 
-# Function to translate text using Google Translate API
-def translate_text_google(text, target_language):
-    translator = Translator()
-    translated_text = translator.translate(text, dest=target_language)
-    return translated_text.text
+# Function to translate text using Google Translate AP
+def translate_text(text, target_language):
+    translator= Translator(to_lang=target_language)
+    translated_text = translator.translate(text)
+    return translated_text
+
 
 # Function to convert text to speech and save as an MP3 file
 def convert_text_to_speech(text, output_file, language='en'):
