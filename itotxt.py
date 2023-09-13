@@ -6,6 +6,7 @@ from googletrans import Translator
 from gtts import gTTS
 import io
 from docx import Document
+from bs4 import BeautifulSoup
 
 # Function to extract text from a DOCX file
 def process_docx_text(docx_file):
@@ -13,12 +14,11 @@ def process_docx_text(docx_file):
     text = docx2txt.process(docx_file)
     return text
 
-# Function to translate text using Google Translate AP
-def translate_text(text, target_language):
-    translator= Translator(to_lang=target_language)
-    translated_text = translator.translate(text)
-    return translated_text
-
+# Function to translate text using Google Translate API
+def translate_text_google(text, target_language):
+    translator = Translator()
+    translated_text = translator.translate(text, dest=target_language)
+    return translated_text.text
 
 # Function to convert text to speech and save as an MP3 file
 def convert_text_to_speech(text, output_file, language='en'):
@@ -39,6 +39,12 @@ def convert_text_to_word_doc(text, output_file):
     doc = Document()
     doc.add_paragraph(text)
     doc.save(output_file)
+
+# Function to convert Word document to HTML
+def convert_word_doc_to_html(docx_file):
+    txt = docx2txt.process(docx_file)
+    soup = BeautifulSoup(txt, 'html.parser')
+    return soup.prettify()
 
 language_mapping = {
     "en": "English",
@@ -105,7 +111,7 @@ language_mapping = {
 # Main Streamlit app
 def main():
     st.image("jangirii.png", width=50)
-    st.title("Document Translation and Conversion to Speech (English - other languages)")
+    st.title("Text Translation and Conversion to Speech (English - other languages)")
 
     # Add a file uploader for DOCX files
     uploaded_docx = st.file_uploader("Upload a DOCX file", type=["docx"])
@@ -134,7 +140,7 @@ def main():
             st.warning("Translation result is empty. Please check your input text.")
 
         # Convert the translated text to speech
-        if st.button("get audio and translated document for download"):
+        if st.button("Convert to Speech"):
             output_file = "translated_speech.mp3"
             convert_text_to_speech(translated_text, output_file, language=target_language_code)
 
@@ -156,6 +162,12 @@ def main():
             # Convert the translated text to a Word document
             word_output_file = "translated_text.docx"
             convert_text_to_word_doc(translated_text, word_output_file)
+
+            # Display the Word document as HTML
+            with open(word_output_file, "rb") as f:
+                html_data = convert_word_doc_to_html(f)
+            st.subheader("Preview of Translated Text as Word Document:")
+            st.components.v1.html(html_data, width=600, height=800)
 
             # Provide a download link for the Word document
             st.markdown(get_binary_file_downloader_html("Download Word Document", word_output_file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), unsafe_allow_html=True)
