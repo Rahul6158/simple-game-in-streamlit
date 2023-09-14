@@ -9,9 +9,22 @@ from docx import Document
 from bs4 import BeautifulSoup
 
 # Function to extract text from a DOCX file
-def process_docx_text(docx_file):
+def process_docx_text(docx_file, skip_lists=False):
     # Extract text from the DOCX file
-    text = docx2txt.process(docx_file)
+    if skip_lists:
+        # Use custom function to remove lists
+        text = process_docx_text_without_lists(docx_file)
+    else:
+        text = docx2txt.process(docx_file)
+    return text
+
+# Custom function to remove lists from DOCX text
+def process_docx_text_without_lists(docx_file):
+    doc = Document(docx_file)
+    text = ""
+    for paragraph in doc.paragraphs:
+        if not paragraph.style.name.startswith('List'):
+            text += paragraph.text + '\n'
     return text
 
 # Function to translate text using Google Translate API
@@ -130,7 +143,12 @@ def main():
         target_language_code = [code for code, lang in language_mapping.items() if lang == target_language][0]
 
         # Translate the extracted text using Google Translate
-        translated_text = translate_text_google(docx_text, target_language_code)
+        try:
+            translated_text = translate_text_google(docx_text, target_language_code)
+        except Exception as e:
+            st.error(f"Translation error: {str(e)}")
+            translated_text = None
+
 
         # Display translated text
         if translated_text:
