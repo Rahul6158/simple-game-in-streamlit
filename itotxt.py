@@ -177,31 +177,32 @@ def main():
 
             # Display the Word document as HTML
             with open(word_output_file, "rb") as f:
-                # Modify your HTML content to set text color using inline CSS
-                html_data = """
-                <!DOCTYPE html>
-                <html>
-                <head>
-                <style>
-                /* Define a CSS class for text with a specific color */
-                .custom-text {
-                 color: red; /* Change 'red' to the desired color */
-                }
-                </style>
-                </head>
-                <body>
-                <!-- Apply the CSS class to the text you want to color -->
-                <p>This is some <span class="custom-text">colored</span> text.</p>
-                </body>
-                </html>
-                    """
+                doc_content = f.read()
 
-                st.subheader("Preview of Translated Text as Word Document:")
-                st.components.v1.html(html_data, width=600, height=800)
+            # Modify your HTML content to set text color using inline CSS
+            html_data = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+            <style>
+            /* Define a CSS class for text with a specific color */
+            .custom-text {{
+                color: red; /* Change 'red' to the desired color */
+            }}
+            </style>
+            </head>
+            <body>
+            <!-- Apply the CSS class to the Word document content -->
+            <p class="custom-text">{doc_content}</p>
+            </body>
+            </html>
+            """
 
-            
+            st.subheader("Preview of Translated Text as Word Document:")
+            st.components.v1.html(html_data, width=600, height=800)
+
             # Provide a download link for the Word document
-                st.markdown(get_binary_file_downloader_html("Download Word Document", word_output_file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), unsafe_allow_html=True)
+            st.markdown(get_binary_file_downloader_html("Download Word Document", word_output_file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), unsafe_allow_html=True)
 
-                if __name__ == "__main__":
-                    main()
+if __name__ == "__main__":
+    main()
