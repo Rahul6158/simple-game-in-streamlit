@@ -1,11 +1,116 @@
 import streamlit as st
+import os
+import base64
+import docx2txt
+from googletrans import Translator
+from gtts import gTTS
+import io
+from docx import Document
+from bs4 import BeautifulSoup
 
-# ... (rest of your code)
+# Function to extract text from a DOCX file
+def process_docx_text(docx_file):
+    # Extract text from the DOCX file
+    text = docx2txt.process(docx_file)
+    return text
+
+# Function to translate text using Google Translate API
+def translate_text_google(text, target_language):
+    translator = Translator()
+    translated_text = translator.translate(text, dest=target_language)
+    return translated_text.text
+
+# Function to convert text to speech and save as an MP3 file
+def convert_text_to_speech(text, output_file, language='en'):
+    if text:
+        tts = gTTS(text=text, lang=language)
+        tts.save(output_file)
+
+# Function to generate a download link for a file
+def get_binary_file_downloader_html(link_text, file_path, file_format):
+    with open(file_path, 'rb') as f:
+        file_data = f.read()
+    b64_file = base64.b64encode(file_data).decode()
+    download_link = f'<a href="data:{file_format};base64,{b64_file}" download="{os.path.basename(file_path)}">{link_text}</a>'
+    return download_link
+
+# Function to convert translated text to a Word document
+def convert_text_to_word_doc(text, output_file):
+    doc = Document()
+    doc.add_paragraph(text)
+    doc.save(output_file)
+
+# Function to convert Word document to HTML
+def convert_word_doc_to_html(docx_file):
+    txt = docx2txt.process(docx_file)
+    soup = BeautifulSoup(txt, 'html.parser')
+    return soup.prettify()
+
+language_mapping = {
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+    "it": "Italian",
+    "pt": "Portuguese",
+    "nl": "Dutch",
+    "hi": "Hindi",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "zh-cn": "Simplified Chinese",
+    "ru": "Russian",
+    "ar": "Arabic",
+    "th": "Thai",
+    "tr": "Turkish",
+    "pl": "Polish",
+    "cs": "Czech",
+    "sv": "Swedish",
+    "da": "Danish",
+    "fi": "Finnish",
+    "el": "Greek",
+    "hu": "Hungarian",
+    "uk": "Ukrainian",
+    "no": "Norwegian",
+    "id": "Indonesian",
+    "vi": "Vietnamese",
+    "ro": "Romanian",
+    "bn": "Bengali",
+    "fa": "Persian",
+    "iw": "Hebrew",
+    "bg": "Bulgarian",
+    "ca": "Catalan",
+    "hr": "Croatian",
+    "sr": "Serbian",
+    "sk": "Slovak",
+    "sl": "Slovenian",
+    "lt": "Lithuanian",
+    "lv": "Latvian",
+    "et": "Estonian",
+    "is": "Icelandic",
+    "ga": "Irish",
+    "sq": "Albanian",
+    "mk": "Macedonian",
+    "hy": "Armenian",
+    "ka": "Georgian",
+    "mt": "Maltese",
+    "mr": "Marathi",
+    "ta": "Tamil",
+    "te": "Telugu",
+    "ur": "Urdu",
+    "ne": "Nepali",
+    "si": "Sinhala",
+    "km": "Khmer",
+    "lo": "Lao",
+    "my": "Burmese",
+    "jw": "Javanese",
+    "mn": "Mongolian",
+    "zu": "Zulu",
+    "xh": "Xhosa"
+}
 
 # Main Streamlit app
 def main():
-    # Add custom CSS to change text color to white
-    st.markdown(
+     st.markdown(
         """
         <style>
         .stTextInput,
@@ -17,7 +122,6 @@ def main():
         """,
         unsafe_allow_html=True,
     )
-
     st.image("jangirii.png", width=50)
     st.title("Text Translation and Conversion to Speech (English - other languages)")
 
