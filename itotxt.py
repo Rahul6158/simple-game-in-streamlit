@@ -110,7 +110,7 @@ language_mapping = {
 
 # Main Streamlit app
 def main():
-     st.markdown(
+    st.markdown(
         """
         <style>
         .stTextInput,
