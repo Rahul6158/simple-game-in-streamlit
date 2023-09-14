@@ -165,6 +165,7 @@ def main():
 
             # Display the Word document as HTML
             with open(word_output_file, "rb") as f:
+                doc_content = f.read()
                 html_data = f"""
             <!DOCTYPE html>
             <html>
