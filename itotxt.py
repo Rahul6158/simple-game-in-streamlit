@@ -8,6 +8,7 @@ import io
 from docx import Document
 from bs4 import BeautifulSoup
 
+
 # Function to extract text from a DOCX file
 def process_docx_text(docx_file):
     # Extract text from the DOCX file
