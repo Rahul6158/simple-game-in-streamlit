@@ -166,6 +166,23 @@ def main():
             # Display the Word document as HTML
             with open(word_output_file, "rb") as f:
                 html_data = convert_word_doc_to_html(f)
+                cssfile = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+            <style>
+            /* Define a CSS class for text with a specific color */
+            .custom-text {{
+                color: red; /* Change 'red' to the desired color */
+            }}
+            </style>
+            </head>
+            <body>
+            <!-- Apply the CSS class to the Word document content -->
+            <p class="custom-text">{doc_content}</p>
+            </body>
+            </html>
+            """
             st.subheader("Preview of Translated Text as Word Document:")
             st.components.v1.html(html_data, width=600, height=800)
             
