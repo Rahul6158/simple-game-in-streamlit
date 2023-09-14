@@ -173,7 +173,7 @@ def main():
             <style>
             /* Define a CSS class for text with a specific color */
             .custom-text {{
-                color: red; /* Change 'red' to the desired color */
+                color: white; /* Change 'white' to the desired color */
             }}
             </style>
             </head>
