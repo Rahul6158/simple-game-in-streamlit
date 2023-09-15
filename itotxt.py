@@ -9,7 +9,7 @@ from docx import Document
 from bs4 import BeautifulSoup
 
 # Function to extract text from a DOCX file
-def process_docx_text(docx_file, skip_lists=False):
+def process_docx_text(docx_file, skip_lists=True):
     # Extract text from the DOCX file
     if skip_lists:
         # Use custom function to remove lists
