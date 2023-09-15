@@ -23,7 +23,7 @@ def process_docx_text_without_lists(docx_file):
     doc = Document(docx_file)
     text = ""
     for paragraph in doc.paragraphs:
-        if not paragraph.style.name.startswith('List'):
+        if not paragraph.style.name.startswith('•'):
             text += paragraph.text + '\n'
     return text
 
