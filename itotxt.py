@@ -181,7 +181,7 @@ def main():
             word_output_file = "translated_text.docx"
             convert_text_to_word_doc(translated_text, word_output_file)
             # Provide a download link for the Word document
-                st.markdown(get_binary_file_downloader_html("Download Word Document", word_output_file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), unsafe_allow_html=True)
+            st.markdown(get_binary_file_downloader_html("Download Word Document", word_output_file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
